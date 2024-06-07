@@ -2,8 +2,6 @@ package net.casual.database
 
 import net.casual.stat.FormattedStat
 import net.casual.stat.UnresolvedPlayerStat
-import net.casual.stat.UnresolvedPlayerStat.Companion.filterNotNull
-import net.casual.util.CollectionUtils.filterNotNull
 import net.casual.util.Named
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -35,14 +33,16 @@ abstract class MinigameStats: IdTable<Int>() {
         condition: Op<Boolean> = Op.TRUE,
         sort: SortOrder = SortOrder.DESC,
         limit: Int = 0
-    ): List<UnresolvedPlayerStat<T>> {
+    ): List<UnresolvedPlayerStat<T & Any>> {
         return joinedWithEventPlayers()
             .select(EventPlayers.uuid, column)
             .where { condition }
             .groupBy(EventPlayers.uuid)
             .limit(limit)
             .orderBy(column, sort)
-            .map { UnresolvedPlayerStat(it[EventPlayers.uuid], it[column]) }
+            .mapNotNull {
+                UnresolvedPlayerStat(it[EventPlayers.uuid], it[column] ?: return@mapNotNull null)
+            }
     }
 
     fun <T> scoreboard(
@@ -51,14 +51,16 @@ abstract class MinigameStats: IdTable<Int>() {
         condition: Op<Boolean> = Op.TRUE,
         sort: SortOrder = SortOrder.DESC,
         limit: Int = 0
-    ): List<UnresolvedPlayerStat<T>> {
+    ): List<UnresolvedPlayerStat<T & Any>> {
         return joinedWithEventPlayers()
             .select(EventPlayers.uuid, column)
             .where { (MinigamePlayers.minigame eq minigame.id) and condition }
             .groupBy(EventPlayers.uuid)
             .limit(limit)
             .orderBy(column, sort)
-            .map { UnresolvedPlayerStat(it[EventPlayers.uuid], it[column]) }
+            .mapNotNull {
+                UnresolvedPlayerStat(it[EventPlayers.uuid], it[column] ?: return@mapNotNull null)
+            }
     }
 
     private fun joinedWithMinigamePlayers(): Join {
@@ -98,15 +100,15 @@ object DuelMinigameStats: MinigameStats() {
     }
 
     fun lifetimeKillsScoreboard(limit: Int = 10): List<UnresolvedPlayerStat<Int>> {
-        return lifetimeScoreboard(kills.sum(), limit = limit).filterNotNull()
+        return lifetimeScoreboard(kills.sum(), limit = limit)
     }
 
     fun lifetimeMostKillsScoreboard(limit: Int = 10): List<UnresolvedPlayerStat<Int>> {
-        return lifetimeScoreboard(kills.max(), limit = limit).filterNotNull()
+        return lifetimeScoreboard(kills.max(), limit = limit)
     }
 
     fun killsScoreboard(minigame: Minigame, limit: Int = 10): List<UnresolvedPlayerStat<Int>> {
-        return scoreboard(minigame, kills.max(), limit = limit).filterNotNull()
+        return scoreboard(minigame, kills.max(), limit = limit)
     }
 }
 
