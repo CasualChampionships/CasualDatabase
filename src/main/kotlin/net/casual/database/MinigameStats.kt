@@ -1,6 +1,7 @@
 package net.casual.database
 
 import net.casual.stat.FormattedStat
+import net.casual.util.CollectionUtils.filterNotNull
 import net.casual.util.CollectionUtils.replaceNullableWithDefault
 import net.casual.util.Named
 import org.jetbrains.exposed.dao.IntEntity
@@ -17,28 +18,45 @@ abstract class MinigameStats: IdTable<Int>() {
 
     final override val primaryKey: PrimaryKey = PrimaryKey(id)
 
-    protected fun <T> lifetime(player: UUID, column: Expression<T>, condition: Expression<Boolean> = Op.TRUE): List<T> {
+    fun <T> lifetime(
+        player: UUID,
+        column: Expression<T>,
+        condition: Expression<Boolean> = Op.TRUE,
+    ): List<T> {
         return joinedWithEventPlayers()
             .select(column)
             .where { (EventPlayers.uuid eq player) and condition }
             .map { it[column] }
     }
 
-    protected fun <T> lifetimeScoreboard(column: Expression<T>, condition: Op<Boolean> = Op.TRUE): List<Pair<UUID, T>> {
+    fun <T> lifetimeScoreboard(
+        column: Expression<T>,
+        condition: Op<Boolean> = Op.TRUE,
+        sort: SortOrder = SortOrder.DESC,
+        limit: Int = 0
+    ): List<Pair<UUID, T>> {
         return joinedWithEventPlayers()
             .select(EventPlayers.uuid, column)
             .where { condition }
             .groupBy(EventPlayers.uuid)
-            .orderBy(column)
+            .limit(limit)
+            .orderBy(column, sort)
             .map { it[EventPlayers.uuid] to it[column] }
     }
 
-    protected fun <T> scoreboard(minigame: Minigame, column: Expression<T>, condition: Op<Boolean> = Op.TRUE): List<Pair<UUID, T>> {
+    fun <T> scoreboard(
+        minigame: Minigame,
+        column: Expression<T>,
+        condition: Op<Boolean> = Op.TRUE,
+        sort: SortOrder = SortOrder.DESC,
+        limit: Int = 0
+    ): List<Pair<UUID, T>> {
         return joinedWithEventPlayers()
             .select(EventPlayers.uuid, column)
             .where { (MinigamePlayers.minigame eq minigame.id) and condition }
             .groupBy(EventPlayers.uuid)
-            .orderBy(column)
+            .limit(limit)
+            .orderBy(column, sort)
             .map { it[EventPlayers.uuid] to it[column] }
     }
 
@@ -66,17 +84,29 @@ object DuelMinigameStats: MinigameStats() {
     val won = bool("won")
     val kills = integer("kills")
 
-    fun lifetimeWins(player: UUID) = lifetime(player, won.count(), won eq true).firstOrNull() ?: 0L
+    fun lifetimeWins(player: UUID): Long {
+        return lifetime(player, won.count(), won eq true).firstOrNull() ?: 0L
+    }
 
-    fun lifetimeWinsScoreboard() = lifetimeScoreboard(won.count(), won eq true)
+    fun lifetimeWinsScoreboard(limit: Int = 10): List<Pair<UUID, Long>> {
+        return lifetimeScoreboard(won.count(), won eq true, limit = limit)
+    }
 
-    fun lifetimeKills(player: UUID) = lifetime(player, kills.sum()).firstOrNull() ?: 0
+    fun lifetimeKills(player: UUID): Int {
+        return lifetime(player, kills.sum()).firstOrNull() ?: 0
+    }
 
-    fun lifetimeKillsScoreboard() = lifetimeScoreboard(kills.sum()).replaceNullableWithDefault(0)
+    fun lifetimeKillsScoreboard(limit: Int = 10): List<Pair<UUID, Int>> {
+        return lifetimeScoreboard(kills.sum(), limit = limit).filterNotNull()
+    }
 
-    fun lifetimeMostKillsScoreboard() = lifetimeScoreboard(kills.max()).replaceNullableWithDefault(0)
+    fun lifetimeMostKillsScoreboard(limit: Int = 10): List<Pair<UUID, Int>> {
+        return lifetimeScoreboard(kills.max(), limit = limit).filterNotNull()
+    }
 
-    fun killsScoreboard(minigame: Minigame) = scoreboard(minigame, kills.max())
+    fun killsScoreboard(minigame: Minigame, limit: Int = 10): List<Pair<UUID, Int?>> {
+        return scoreboard(minigame, kills.max(), limit = limit).filterNotNull()
+    }
 }
 
 class DuelPlayerStats(id: EntityID<Int>): PlayerStats(id) {
