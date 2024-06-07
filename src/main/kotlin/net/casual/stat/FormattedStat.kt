@@ -43,12 +43,5 @@ interface FormattedStat {
         fun float64(value: Double): FormattedStat {
             return of(value, "%,.2f".format(value))
         }
-
-        fun <A, B: Any> fromScoreboard(
-            scoreboard: List<Pair<A, B>>,
-            mapper: (B) -> FormattedStat = ::of
-        ): List<Pair<A, FormattedStat>> {
-            return scoreboard.map { it.first to mapper(it.second) }
-        }
     }
 }

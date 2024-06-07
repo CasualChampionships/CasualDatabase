@@ -2,7 +2,6 @@ package net.casual.database
 
 import net.casual.stat.FormattedStat
 import net.casual.util.CollectionUtils.filterNotNull
-import net.casual.util.CollectionUtils.replaceNullableWithDefault
 import net.casual.util.Named
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass

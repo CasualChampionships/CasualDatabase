@@ -47,6 +47,13 @@ publishing {
             artifactId = "casual-database"
             version = getGitHash()
 
+            from(components["java"])
+        }
+        create<MavenPublication>("casual-database-core") {
+            groupId = "com.github.CasualChampionships"
+            artifactId = "casual-database-core"
+            version = getGitHash()
+
             artifact(tasks.shadowJar.get()) {
                 classifier = null
             }
