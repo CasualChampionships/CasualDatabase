@@ -2,6 +2,7 @@ package net.casual.database
 
 import net.casual.stat.FormattedStat
 import net.casual.util.CollectionUtils.replaceNullableWithDefault
+import net.casual.util.Named
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -58,7 +59,7 @@ abstract class MinigameStats: IdTable<Int>() {
 abstract class PlayerStats(id: EntityID<Int>): IntEntity(id) {
     abstract val minigameName: String
 
-    abstract fun getFormattedStats(): List<FormattedStat>
+    abstract fun getFormattedStats(): List<Named<FormattedStat>>
 }
 
 object DuelMinigameStats: MinigameStats() {
@@ -86,10 +87,10 @@ class DuelPlayerStats(id: EntityID<Int>): PlayerStats(id) {
 
     override val minigameName: String = "Duel"
 
-    override fun getFormattedStats(): List<FormattedStat> {
+    override fun getFormattedStats(): List<Named<FormattedStat>> {
         return listOf(
-            FormattedStat.bool("Won", won),
-            FormattedStat.int32("Kills", kills)
+            Named("Won", FormattedStat.bool(won)),
+            Named("Kills",  FormattedStat.int32(kills))
         )
     }
 
@@ -137,16 +138,12 @@ class UHCPlayerStats(id: EntityID<Int>): PlayerStats(id) {
 
     override val minigameName: String = "UHC"
 
-    override fun getFormattedStats(): List<FormattedStat> {
+    override fun getFormattedStats(): List<Named<FormattedStat>> {
         return listOf(
-            // FormattedStat.bool("Won", won),
-            // FormattedStat.bool("Died", died),
-            FormattedStat.int32("Kills", kills),
-            FormattedStat.float32("Damage Dealt", damageDealt),
-            FormattedStat.float32("Damage Taken", damageTaken),
-            FormattedStat.float32("Damage Healed", damageHealed),
-            // FormattedStat.duration("Time Alive", aliveTime),
-            // FormattedStat.duration("Time Crouching", crouchTime)
+            Named("Kills", FormattedStat.int32(kills)),
+            Named("Damage Dealt", FormattedStat.float32(damageDealt)),
+            Named("Damage Taken", FormattedStat.float32(damageTaken)),
+            Named("Damage Healed", FormattedStat.float32(damageHealed))
         )
     }
 

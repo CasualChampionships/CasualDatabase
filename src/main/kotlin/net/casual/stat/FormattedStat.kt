@@ -1,7 +1,5 @@
 package net.casual.stat
 
-import kotlin.time.Duration
-
 interface FormattedStat {
     fun value(): Any
 
