@@ -8,7 +8,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
 
     `maven-publish`
-    application
 }
 
 group = "net.casual"

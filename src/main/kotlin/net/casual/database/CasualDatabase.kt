@@ -39,27 +39,6 @@ class CasualDatabase(url: String, username: String, password: String) {
         }
     }
 
-    // TODO:
-    // suspend fun getOrCreateDiscordPlayer(username: String): DiscordPlayer? {
-    //     var player = getDiscordPlayer(username)
-    //     if (player != null) {
-    //         return player
-    //     }
-    //     val profile = Kojang.getMojangUserProfile(username) ?: return null
-    //     val uuid = UUID.fromString(profile.uuid)
-    //     player = getDiscordPlayer(uuid)
-    //     if (player != null) {
-    //         player.name = profile.username
-    //         return player
-    //     }
-    //     return transaction {
-    //         DiscordPlayer.new(uuid) {
-    //             name = profile.username
-    //             team = null
-    //         }
-    //     }
-    // }
-
     fun getDiscordTeam(name: String): DiscordTeam? {
         return transaction {
             DiscordTeam.find { DiscordTeams.name eq name }.singleOrNull()
