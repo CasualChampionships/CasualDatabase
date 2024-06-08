@@ -47,15 +47,16 @@ abstract class MinigameStats: IdTable<Int>() {
     }
 
     fun <T> scoreboard(
-        minigame: Minigame,
+        minigames: Iterable<Minigame>,
         column: Expression<T>,
         condition: Op<Boolean> = Op.TRUE,
         sort: SortOrder = SortOrder.DESC,
         limit: Int = 0
     ): List<UnresolvedPlayerStat<T & Any>> {
+        val minigameIds = minigames.map { it.id }
         return joinedWithEventPlayers()
             .select(EventPlayers.uuid, column)
-            .where { (MinigamePlayers.minigame eq minigame.id) and condition }
+            .where { (MinigamePlayers.minigame inList minigameIds) and condition }
             .groupBy(EventPlayers.uuid)
             .limit(limit)
             .orderBy(column, sort)
