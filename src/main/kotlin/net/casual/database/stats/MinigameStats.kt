@@ -32,15 +32,16 @@ abstract class MinigameStats: IdTable<Int>() {
         sort: SortOrder = SortOrder.DESC,
         limit: Int = 0
     ): List<UnresolvedPlayerStat<T & Any>> {
-        return joinedWithEventPlayers()
-            .select(EventPlayers.uuid, column)
-            .where { condition }
-            .groupBy(EventPlayers.uuid)
-            .limit(limit)
-            .orderBy(column, sort)
-            .mapNotNull {
-                UnresolvedPlayerStat(it[EventPlayers.uuid], it[column] ?: return@mapNotNull null)
+        return joinedWithEventPlayers().select(EventPlayers.uuid, column).apply {
+            where { condition }
+            groupBy(EventPlayers.uuid)
+            orderBy(column, sort)
+            if (limit != 0) {
+                limit(limit)
             }
+        }.mapNotNull {
+            UnresolvedPlayerStat(it[EventPlayers.uuid], it[column] ?: return@mapNotNull null)
+        }
     }
 
     fun <T> scoreboard(
@@ -51,15 +52,16 @@ abstract class MinigameStats: IdTable<Int>() {
         limit: Int = 0
     ): List<UnresolvedPlayerStat<T & Any>> {
         val minigameIds = minigames.map { it.id }
-        return joinedWithEventPlayers()
-            .select(EventPlayers.uuid, column)
-            .where { (MinigamePlayers.minigame inList minigameIds) and condition }
-            .groupBy(EventPlayers.uuid)
-            .limit(limit)
-            .orderBy(column, sort)
-            .mapNotNull {
-                UnresolvedPlayerStat(it[EventPlayers.uuid], it[column] ?: return@mapNotNull null)
+        return joinedWithEventPlayers().select(EventPlayers.uuid, column).apply {
+            where { (MinigamePlayers.minigame inList minigameIds) and condition }
+            groupBy(EventPlayers.uuid)
+            orderBy(column, sort)
+            if (limit != 0) {
+                limit(limit)
             }
+        }.mapNotNull {
+            UnresolvedPlayerStat(it[EventPlayers.uuid], it[column] ?: return@mapNotNull null)
+        }
     }
 
     fun joinedWithEventPlayers(): Join {
