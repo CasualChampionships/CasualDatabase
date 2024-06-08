@@ -60,6 +60,12 @@ class CasualDatabase(url: String, username: String, password: String) {
         }
     }
 
+    fun getEvents(): List<Event> {
+        return transaction {
+            Event.all().toList()
+        }
+    }
+
     fun <T> transaction(statement: Transaction.() -> T): T {
         return transaction(database) {
             addLogger(StdOutSqlLogger)
