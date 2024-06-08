@@ -2,15 +2,12 @@ package net.casual.database.stats
 
 import net.casual.database.EventPlayers
 import net.casual.database.Minigame
-import net.casual.database.MinigamePlayer
 import net.casual.database.MinigamePlayers
 import net.casual.stat.UnresolvedPlayerStat
 import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
 
 abstract class MinigameStats: IdTable<Int>() {
@@ -65,17 +62,17 @@ abstract class MinigameStats: IdTable<Int>() {
             }
     }
 
+    fun joinedWithEventPlayers(): Join {
+        return joinedWithMinigamePlayers()
+            .join(EventPlayers, JoinType.INNER, additionalConstraint = { MinigamePlayers.player eq EventPlayers.id })
+    }
+
     private fun joinedWithMinigamePlayers(): Join {
         return join(
             MinigamePlayers,
             JoinType.INNER,
             additionalConstraint = { id eq MinigamePlayers.id }
         )
-    }
-
-    private fun joinedWithEventPlayers(): Join {
-        return joinedWithMinigamePlayers()
-            .join(EventPlayers, JoinType.INNER, additionalConstraint = { MinigamePlayers.player eq EventPlayers.id })
     }
 }
 
