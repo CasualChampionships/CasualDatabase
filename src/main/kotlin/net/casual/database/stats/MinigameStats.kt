@@ -63,8 +63,11 @@ abstract class MinigameStats: IdTable<Int>() {
     }
 
     fun joinedWithEventPlayers(): Join {
-        return joinedWithMinigamePlayers()
-            .join(EventPlayers, JoinType.INNER, additionalConstraint = { MinigamePlayers.player eq EventPlayers.id })
+        return joinedWithMinigamePlayers().join(
+            EventPlayers,
+            JoinType.INNER,
+            additionalConstraint = { MinigamePlayers.player eq EventPlayers.id }
+        )
     }
 
     private fun joinedWithMinigamePlayers(): Join {
