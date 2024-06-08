@@ -55,6 +55,16 @@ object EventTeams: IntIdTable() {
     val event = reference("event", Events)
 }
 
+class Event(id: EntityID<Int>): IntEntity(id) {
+    var name by Events.name
+
+    val minigames by Minigame referrersOn Minigames.event
+    val players by EventPlayer referrersOn EventPlayers.event
+    val teams by EventTeam referrersOn EventTeams.event
+
+    companion object: IntEntityClass<Event>(Events)
+}
+
 class Minigame(id: EntityID<UUID>): UUIDEntity(id) {
     var type by Minigames.type
     var startTime by Minigames.startTime
