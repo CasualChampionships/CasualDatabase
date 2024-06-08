@@ -2,6 +2,8 @@ package net.casual.database
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import net.casual.database.stats.DuelMinigameStats
+import net.casual.database.stats.UHCMinigameStats
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
@@ -19,6 +21,7 @@ class CasualDatabase(url: String, username: String, password: String) {
                 MinigameAdvancements,
                 MinigameAdvancementAwards,
                 MinigamePlayers,
+                Events,
                 EventPlayers,
                 EventTeams,
                 UHCMinigameStats,

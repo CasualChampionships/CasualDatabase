@@ -11,10 +11,16 @@ import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 import java.util.*
 
+object Events: IntIdTable() {
+    val name = varchar("name", 64)
+}
+
 object Minigames: UUIDTable() {
     val type = varchar("type", 64)
     val startTime = timestamp("start_time")
     val endTime = timestamp("end_time")
+
+    val event = reference("event", Events)
 }
 
 object MinigameAdvancements: IntIdTable() {
@@ -37,12 +43,16 @@ object MinigamePlayers: IntIdTable() {
 object EventPlayers: IntIdTable() {
     val uuid = uuid("uuid")
     val team = reference("team", EventTeams)
+
+    val event = reference("event", Events)
 }
 
 object EventTeams: IntIdTable() {
     val name = varchar("name", 32)
     val prefix = varchar("prefix", 16)
     val color = enumeration("color", MinecraftColor::class)
+
+    val event = reference("event", Events)
 }
 
 class Minigame(id: EntityID<UUID>): UUIDEntity(id) {

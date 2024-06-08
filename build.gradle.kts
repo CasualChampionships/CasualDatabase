@@ -48,6 +48,9 @@ publishing {
             version = getGitHash()
 
             from(components["java"])
+            artifact(tasks.kotlinSourcesJar) {
+                classifier = "sources"
+            }
         }
         create<MavenPublication>("casual-database-core") {
             groupId = "com.github.CasualChampionships"
