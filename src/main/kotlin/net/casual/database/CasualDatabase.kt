@@ -4,13 +4,16 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import net.casual.database.stats.DuelMinigameStats
 import net.casual.database.stats.UHCMinigameStats
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.DatabaseConfig
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
-class CasualDatabase(url: String, username: String, password: String) {
+class CasualDatabase(url: String, username: String, password: String, config: DatabaseConfig? = null) {
     private val source = source(url, username, password)
-    private val database = Database.connect(source)
+    private val database = Database.connect(source, databaseConfig = config)
 
     fun initialize() {
         transaction {
@@ -68,7 +71,6 @@ class CasualDatabase(url: String, username: String, password: String) {
 
     fun <T> transaction(statement: Transaction.() -> T): T {
         return transaction(database) {
-            addLogger(StdOutSqlLogger)
             statement.invoke(this)
         }
     }
