@@ -11,7 +11,12 @@ import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
-class CasualDatabase(url: String, username: String, password: String, config: DatabaseConfig? = null) {
+class CasualDatabase(
+    url: String,
+    username: String? = null,
+    password: String? = null,
+    config: DatabaseConfig? = null
+) {
     private val source = source(url, username, password)
     private val database = Database.connect(source, databaseConfig = config)
 
@@ -79,7 +84,7 @@ class CasualDatabase(url: String, username: String, password: String, config: Da
         source.close()
     }
 
-    private fun source(url: String, username: String, password: String): HikariDataSource {
+    private fun source(url: String, username: String?, password: String?): HikariDataSource {
         val config = HikariConfig()
         config.jdbcUrl = url
         config.username = username
