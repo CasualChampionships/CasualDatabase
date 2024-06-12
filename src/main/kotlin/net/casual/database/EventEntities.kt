@@ -49,7 +49,6 @@ object EventPlayers: IntIdTable() {
 
 object EventTeams: IntIdTable() {
     val name = varchar("name", 32)
-    val prefix = varchar("prefix", 16)
     val color = enumeration("color", MinecraftColor::class)
 
     val event = reference("event", Events)
@@ -120,7 +119,6 @@ class EventPlayer(id: EntityID<Int>): IntEntity(id) {
 
 class EventTeam(id: EntityID<Int>): IntEntity(id) {
     var name by EventTeams.name
-    var prefix by EventTeams.prefix
     var color by EventTeams.color
     var event by Event referencedOn EventTeams.event
 
