@@ -76,7 +76,7 @@ class Minigame(id: EntityID<UUID>): UUIDEntity(id) {
 }
 
 class MinigameAdvancement(id: EntityID<Int>): IntEntity(id) {
-    var minigameType by MinigameAdvancements.advancementId
+    var minigameType by MinigameAdvancements.minigameType
     var advancementId by MinigameAdvancements.advancementId
     var title by MinigameAdvancements.title
     var displayItem by MinigameAdvancements.displayItem
