@@ -18,7 +18,7 @@ object DiscordTeams: IntIdTable() {
     val logo = varchar("logo_url", 2083).nullable()
     val color = enumeration("color", MinecraftColor::class)
     val wins = integer("wins")
-    val roleId = long("role_id")
+    val roleId = long("role_id").nullable()
     val channelId = long("channel_id").nullable()
 }
 
