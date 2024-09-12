@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "net.casual-championships"
-version = "0.1.1"
+version = "0.1.2"
 
 repositories {
     mavenCentral()
@@ -23,10 +23,6 @@ dependencies {
     api(libs.exposed.dao)
     api(libs.exposed.jdbc)
     api(libs.exposed.datetime)
-}
-
-tasks.compileKotlin {
-    kotlinOptions.jvmTarget = "17"
 }
 
 tasks.shadowJar {

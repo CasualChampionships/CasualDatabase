@@ -1,10 +1,10 @@
 [versions]
-kotlin     = "1.9.24"
+kotlin     = "2.0.20"
 shadow     = "7.1.2"
 coroutines = "1.9.0-RC"
 json       = "1.6.3"
-exposed    = "0.51.1"
-mysql      = "8.4.0"
+exposed    = "0.54.0"
+mysql      = "9.0.0"
 hikari     = "5.1.0"
 
 [libraries]
