@@ -19,4 +19,7 @@ enum class MinecraftColor(val formatted: String, val color: Color) {
     LIGHT_PURPLE("Light Purple",  Color(0xFF55FF)),
     YELLOW("Yellow",  Color(0xFFFF55)),
     WHITE("White",  Color(0xFFFFFF));
+
+    val code: Int
+        get() = this.color.rgb
 }
