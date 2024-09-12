@@ -1,21 +1,16 @@
-import org.apache.commons.io.output.ByteArrayOutputStream
-import java.nio.charset.Charset
-
 plugins {
-    kotlin("jvm") version "1.9.24"
-    kotlin("plugin.serialization") version "1.9.24"
-
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.shadow)
 
     `maven-publish`
 }
 
-group = "net.casual"
-version = "0.0.1"
+group = "net.casual-championships"
+version = "0.1.0"
 
 repositories {
     mavenCentral()
-    maven("https://jitpack.io/")
 }
 
 dependencies {
@@ -31,7 +26,7 @@ dependencies {
 }
 
 tasks.compileKotlin {
-    kotlinOptions.jvmTarget = "21"
+    kotlinOptions.jvmTarget = "17"
 }
 
 tasks.shadowJar {
@@ -42,33 +37,39 @@ tasks.shadowJar {
 
 publishing {
     publications {
-        create<MavenPublication>("casual-database") {
-            groupId = "com.github.CasualChampionships"
+        create<MavenPublication>("CasualDatabase") {
+            groupId = "net.casual-championships"
             artifactId = "casual-database"
-            version = getGitHash()
 
             from(components["java"])
             artifact(tasks.kotlinSourcesJar) {
                 classifier = "sources"
             }
         }
-        create<MavenPublication>("casual-database-core") {
-            groupId = "com.github.CasualChampionships"
+        create<MavenPublication>("CasualDatabaseCore") {
+            groupId = "net.casual-championships"
             artifactId = "casual-database-core"
-            version = getGitHash()
 
             artifact(tasks.shadowJar.get()) {
                 classifier = null
             }
         }
     }
-}
 
-fun getGitHash(): String {
-    val out = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "rev-parse", "HEAD")
-        standardOutput = out
+    repositories {
+        val mavenUrl = System.getenv("MAVEN_URL")
+        if (mavenUrl != null) {
+            maven {
+                url = uri(mavenUrl)
+                val mavenUsername = System.getenv("MAVEN_USERNAME")
+                val mavenPassword = System.getenv("MAVEN_PASSWORD")
+                if (mavenUsername != null && mavenPassword != null) {
+                    credentials {
+                        username = mavenUsername
+                        password = mavenPassword
+                    }
+                }
+            }
+        }
     }
-    return out.toString(Charset.defaultCharset()).trim()
 }
