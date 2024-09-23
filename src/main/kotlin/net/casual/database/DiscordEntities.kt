@@ -1,6 +1,5 @@
 package net.casual.database
 
-import net.casual.MinecraftColor
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.UUIDEntity
@@ -16,7 +15,7 @@ object DiscordTeams: IntIdTable() {
     val name = varchar("name", 32).uniqueIndex()
     val prefix = varchar("prefix", 16)
     val logo = varchar("logo_url", 2083).nullable()
-    val color = enumeration("color", MinecraftColor::class)
+    val color = integer("color").default(0xFFFFFF)
     val wins = integer("wins")
     val roleId = long("role_id").nullable()
     val channelId = long("channel_id").nullable()

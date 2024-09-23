@@ -1,7 +1,5 @@
 package net.casual.database
 
-import net.casual.MinecraftColor
-import net.casual.database.MinigameAdvancement.Companion.referrersOn
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.UUIDEntity
@@ -10,7 +8,6 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
-import org.jetbrains.exposed.sql.mapLazy
 import java.util.*
 
 object Events: IntIdTable() {
@@ -49,7 +46,7 @@ object EventPlayers: IntIdTable() {
 
 object EventTeams: IntIdTable() {
     val name = varchar("name", 32)
-    val color = enumeration("color", MinecraftColor::class)
+    val color = integer("color")
 
     val event = reference("event", Events)
 }
