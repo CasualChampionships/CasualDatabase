@@ -6,8 +6,8 @@ plugins {
     `maven-publish`
 }
 
-group = "net.casual-championships"
-version = "0.2.0"
+group = "net.casualchampionships"
+version = "0.2.1"
 
 repositories {
     mavenCentral()
@@ -34,7 +34,7 @@ tasks.shadowJar {
 publishing {
     publications {
         create<MavenPublication>("CasualDatabase") {
-            groupId = "net.casual-championships"
+            groupId = "net.casualchampionships"
             artifactId = "casual-database"
 
             from(components["java"])
@@ -43,7 +43,7 @@ publishing {
             }
         }
         create<MavenPublication>("CasualDatabaseCore") {
-            groupId = "net.casual-championships"
+            groupId = "net.casualchampionships"
             artifactId = "casual-database-core"
 
             artifact(tasks.shadowJar.get()) {
