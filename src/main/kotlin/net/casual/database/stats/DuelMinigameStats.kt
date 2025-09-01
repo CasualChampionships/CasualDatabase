@@ -1,8 +1,8 @@
 package net.casual.database.stats
 
 import net.casual.database.MinigamePlayer
-import org.jetbrains.exposed.dao.IntEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.dao.IntEntityClass
 
 object DuelMinigameStats: MinigameStats() {
     val won = bool("won").default(false)

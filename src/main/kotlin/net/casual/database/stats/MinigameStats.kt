@@ -4,10 +4,11 @@ import net.casual.database.EventPlayers
 import net.casual.database.Minigame
 import net.casual.database.MinigamePlayers
 import net.casual.stat.UnresolvedPlayerStat
-import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.v1.core.*
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.core.dao.id.IdTable
+import org.jetbrains.exposed.v1.dao.IntEntity
+import org.jetbrains.exposed.v1.jdbc.select
 import java.util.*
 
 abstract class MinigameStats: IdTable<Int>() {

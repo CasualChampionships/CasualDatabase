@@ -1,14 +1,17 @@
+@file:OptIn(ExperimentalTime::class)
+
 package net.casual.database
 
-import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.IntEntityClass
-import org.jetbrains.exposed.dao.UUIDEntity
-import org.jetbrains.exposed.dao.UUIDEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.dao.id.UUIDTable
-import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
+import org.jetbrains.exposed.v1.core.dao.id.EntityID
+import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
+import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import org.jetbrains.exposed.v1.dao.IntEntity
+import org.jetbrains.exposed.v1.dao.IntEntityClass
+import org.jetbrains.exposed.v1.dao.UUIDEntity
+import org.jetbrains.exposed.v1.dao.UUIDEntityClass
+import org.jetbrains.exposed.v1.datetime.timestamp
 import java.util.*
+import kotlin.time.ExperimentalTime
 
 object Events: IntIdTable() {
     val name = varchar("name", 64)
