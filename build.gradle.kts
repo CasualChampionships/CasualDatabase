@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "net.casualchampionships"
-version = "0.3.0"
+version = "0.3.1"
 
 repositories {
     mavenCentral()
@@ -48,6 +48,9 @@ publishing {
 
             artifact(tasks.shadowJar.get()) {
                 classifier = null
+            }
+            artifact(tasks.kotlinSourcesJar) {
+                classifier = "sources"
             }
         }
     }
