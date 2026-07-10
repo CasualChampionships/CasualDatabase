@@ -1,17 +1,15 @@
-@file:OptIn(ExperimentalTime::class)
-
 package net.casual.database
 
 import org.jetbrains.exposed.v1.core.dao.id.EntityID
 import org.jetbrains.exposed.v1.core.dao.id.IntIdTable
-import org.jetbrains.exposed.v1.core.dao.id.UUIDTable
+import org.jetbrains.exposed.v1.core.dao.id.java.UUIDTable
+import org.jetbrains.exposed.v1.core.java.javaUUID
 import org.jetbrains.exposed.v1.dao.IntEntity
 import org.jetbrains.exposed.v1.dao.IntEntityClass
-import org.jetbrains.exposed.v1.dao.UUIDEntity
-import org.jetbrains.exposed.v1.dao.UUIDEntityClass
+import org.jetbrains.exposed.v1.dao.java.UUIDEntity
+import org.jetbrains.exposed.v1.dao.java.UUIDEntityClass
 import org.jetbrains.exposed.v1.datetime.timestamp
 import java.util.*
-import kotlin.time.ExperimentalTime
 
 object Events: IntIdTable() {
     val name = varchar("name", 64)
@@ -43,7 +41,7 @@ object MinigamePlayers: IntIdTable() {
 }
 
 object EventPlayers: IntIdTable() {
-    val uuid = uuid("uuid")
+    val uuid = javaUUID("uuid")
     val team = reference("team", EventTeams)
 }
 

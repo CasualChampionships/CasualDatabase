@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "net.casualchampionships"
-version = "0.3.1"
+version = "0.3.2"
 
 repositories {
     mavenCentral()
@@ -28,6 +28,10 @@ dependencies {
 tasks.shadowJar {
     dependencies {
         exclude(dependency("org.jetbrains.kotlin:kotlin-stdlib"))
+        exclude(dependency("org.jetbrains.kotlin:kotlin-reflect"))
+        exclude(dependency("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm"))
+
+        exclude(dependency("org.slf4j:slf4j-api"))
     }
 }
 
